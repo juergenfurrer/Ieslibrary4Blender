@@ -11,26 +11,30 @@ addon_idname = __package__.split(".")[0]
 
 # -----------------------------------------------------------------------------
 
+
 def getPreferences(context=None):
-    if context is None: context = bpy.context
+    if context is None:
+        context = bpy.context
     preferences = context.preferences
     addon_preferences = preferences.addons[addon_idname].preferences
     return addon_preferences
 
+
 # -----------------------------------------------------------------------------
+
 
 class Ieslibrary4BlenderPreferences(bpy.types.AddonPreferences):
     bl_idname = addon_idname
 
     texture_dir: bpy.props.StringProperty(
         name="Texture Directory",
-        subtype='DIR_PATH',
+        subtype="DIR_PATH",
         default="Ieslibrary2Blender",
     )
 
     ieslibrary_apikey: bpy.props.StringProperty(
         name="API-Key",
-        subtype='NONE',
+        subtype="NONE",
         default="",
     )
 
@@ -58,11 +62,17 @@ class Ieslibrary4BlenderPreferences(bpy.types.AddonPreferences):
         layout = self.layout
 
         layout.label(text="The texture directory where the textures are downloaded.")
-        layout.label(text="It can either be relative to the blend file, or global to all files.")
-        layout.label(text="If it is relative, you must always save the blend file before importing lights.")
+        layout.label(
+            text="It can either be relative to the blend file, or global to all files."
+        )
+        layout.label(
+            text="If it is relative, you must always save the blend file before importing lights."
+        )
         layout.prop(self, "texture_dir")
 
-        layout.label(text="For the import of lights from ieslibrary a valid API-Key is needed.")
+        layout.label(
+            text="For the import of lights from ieslibrary a valid API-Key is needed."
+        )
         layout.label(text="Get the API-Key from ieslibrary.com (login needed)")
         layout.prop(self, "ieslibrary_apikey")
 
@@ -74,6 +84,7 @@ class Ieslibrary4BlenderPreferences(bpy.types.AddonPreferences):
             layout.prop(self, "ies_light_strength")
 
         layout.prop(self, "ies_pack_files")
+
 
 # -----------------------------------------------------------------------------
 

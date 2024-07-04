@@ -9,9 +9,6 @@ import concurrent.futures
 import os
 import string
 
-import sys
-import platform
-
 import requests
 import shutil
 import re
@@ -21,9 +18,9 @@ from ..settings import TEXTURE_DIR
 from ..preferences import getPreferences
 
 
-class AbstractScraper():
+class AbstractScraper:
     # Can be 'MATERIAL', 'WORLD', 'LIGHT'
-    scraped_type = {'MATERIAL'}
+    scraped_type = {"MATERIAL"}
     # The name of the scraped source, displayed in UI
     source_name = "<Abstract>"
     # The URL of the source's home, used for the list of available sources in panels
@@ -39,7 +36,7 @@ class AbstractScraper():
 
     @staticmethod
     def sortTextWithNumbers(text):
-        return [int(i) if i.isdigit() else i for i in re.split(r'(\d+)', text)]
+        return [int(i) if i.isdigit() else i for i in re.split(r"(\d+)", text)]
 
     @classmethod
     def canHandleUrl(cls, url):
@@ -54,8 +51,10 @@ class AbstractScraper():
 
     @classmethod
     def _fetch(cls, url):
-        headers = {"User-Agent":"Mozilla/5.0"}  # fake user agent
-        r = requests.get(url if "https://" in url else "https://" + url, headers=headers)
+        headers = {"User-Agent": "Mozilla/5.0"}  # fake user agent
+        r = requests.get(
+            url if "https://" in url else "https://" + url, headers=headers
+        )
         if r.status_code != 200:
             return None
         else:
@@ -69,7 +68,7 @@ class AbstractScraper():
             self.error = "URL not found: {}".format(url)
 
     def getRedirection(self, url):
-        headers = {"User-Agent":"Mozilla/5.0"}  # fake user agent
+        headers = {"User-Agent": "Mozilla/5.0"}  # fake user agent
         url = url if "https://" in url else "https://" + url
         r = requests.get(url, headers=headers, allow_redirects=False)
         if r.status_code == 302:
@@ -86,7 +85,7 @@ class AbstractScraper():
             texture_dir = texture_dir[2:]
         if not os.path.isabs(texture_dir):
             texture_dir = os.path.realpath(os.path.join(self.texture_root, texture_dir))
-        name_path = material_name.replace('/', os.path.sep)
+        name_path = material_name.replace("/", os.path.sep)
         dirpath = os.path.join(texture_dir, name_path)
         os.makedirs(dirpath, exist_ok=True)
         return dirpath
@@ -96,12 +95,13 @@ class AbstractScraper():
             headers = {"User-Agent": "Mozilla/5.0"}  # fake user agent
             r = requests.get(url, stream=True, headers=headers)
             if r.status_code == 200:
-                with open(path, 'wb') as f:
+                with open(path, "wb") as f:
                     r.raw.decode_content = True
                     shutil.copyfileobj(r.raw, f)
             else:
                 self.error = "URL not found: {}".format(url)
                 return -1
+
         return func
 
     def fetchImage(self, url, material_name, map_name, force_ext=False):
@@ -139,7 +139,8 @@ class AbstractScraper():
 
     def saveFile(self, path, data_callback_function):
         """function for saving data, path is the location
-        dataCallbackFunction is a function that is used if file is not already present, return -1 if error occurred"""
+        dataCallbackFunction is a function that is used if file is not already present, return -1 if error occurred
+        """
         if os.path.isfile(path) and not self.reinstall:
             print("Using cached {}.".format(path))
         else:
@@ -152,7 +153,7 @@ class AbstractScraper():
     def clearString(self, s):
         """Remove non printable characters"""
         printable = set(string.printable)
-        return ''.join(filter(lambda x: x in printable, s))
+        return "".join(filter(lambda x: x in printable, s))
 
     def getVariantData(self, asset_name):
         root = self.getTextureDirectory(os.path.join(self.home_dir, asset_name))
@@ -198,7 +199,7 @@ class AbstractScraper():
             if thumbnail_req is None:
                 return
             thumbnail_type = thumbnail_req.headers["Content-Type"]
-            if thumbnail_type == 'image/png':
+            if thumbnail_type == "image/png":
                 ext = "png"
             elif thumbnail_type == "image/jpeg":
                 ext = "jpg"
@@ -226,10 +227,10 @@ class AbstractScraper():
 
     def getThumbnail(self):
         """Function for getting a url for a thumbnail for the texture, preferably using only self.assetName
-         but you can pass more arguments with self.metadata.custom as its called after getVariantList.
-         you can return None if there is no thumbnail or you cant get one
-         returns: url or None
-         """
+        but you can pass more arguments with self.metadata.custom as its called after getVariantList.
+        you can return None if there is no thumbnail or you cant get one
+        returns: url or None
+        """
         return None
 
     def isDownloaded(self, target_variation):

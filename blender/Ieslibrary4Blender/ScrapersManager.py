@@ -9,7 +9,8 @@ import os
 
 from .Scrapers.AbstractScraper import AbstractScraper
 
-class ScrapersManager():
+
+class ScrapersManager:
     all_scrapers = None
 
     @staticmethod
@@ -17,17 +18,20 @@ class ScrapersManager():
         """dirty but useful, for one to painlessly write scrapping class
         and just drop them in the scrapers dir"""
         import importlib
+
         scrapers_names = []
-        scrapers_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Scrapers")
-        package = __name__[:__name__.rfind('.')]
+        scrapers_dir = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), "Scrapers"
+        )
+        package = __name__[: __name__.rfind(".")]
         for f in os.listdir(scrapers_dir):
             if f.endswith(".py") and os.path.isfile(os.path.join(scrapers_dir, f)):
                 scrapers_names.append(f[:-3])
         scrapers = []
         for s in scrapers_names:
-            module = importlib.import_module('.Scrapers.' + s, package=package)
+            module = importlib.import_module(".Scrapers." + s, package=package)
             for x in dir(module):
-                if x == 'AbstractScraper':
+                if x == "AbstractScraper":
                     continue
                 m = getattr(module, x)
                 if isinstance(m, type) and issubclass(m, AbstractScraper):

@@ -5,6 +5,10 @@
 # ies-lights from ieslibrary.com. It is released under the terms of the MIT
 # license. See the LICENSE.md file for the full text.
 
+from . import preferences
+from . import frontend
+
+
 bl_info = {
     "name": "Ieslibrary for Blender",
     "author": "Jürgen Furrer <juergen@swisscode.sk>",
@@ -19,29 +23,16 @@ bl_info = {
     "category": "Import",
 }
 
-def isImportedInBlender():
-    try:
-        import bpy
-        return True
-    except ImportError:
-        return False
+
+def register():
+    preferences.register()
+    frontend.register()
 
 
-if isImportedInBlender():
-    from . import preferences
-    from . import frontend
-    from .callback import register_callback
+def unregister():
+    frontend.unregister()
+    preferences.unregister()
 
-    def register():
-        preferences.register()
-        frontend.register()
-        
-    def unregister():
-        frontend.unregister()
-        preferences.unregister()
 
-    if __name__ == "__main__":
-        register()
-
-else:
-    from .ScrapersManager import ScrapersManager
+if __name__ == "__main__":
+    register()

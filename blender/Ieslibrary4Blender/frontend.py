@@ -17,7 +17,7 @@ import bpy.utils.previews
 from bpy.props import EnumProperty
 
 
-## Operators
+# Operators
 
 # I really wish there would be a cleaner way to do so: I need to prompt twice
 # the user (once for the URL, then for the variant, loaded from the URL) so I
@@ -33,54 +33,61 @@ metadataGetFailed = list()
 
 
 class PopupOperator(bpy.types.Operator):
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {"REGISTER", "UNDO"}
 
     def invoke(self, context, event):
         wm = context.window_manager
         return wm.invoke_props_dialog(self)
+
 
 class ObjectPopupOperator(PopupOperator):
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
 
+
 class CallbackProps:
     callback_handle: bpy.props.IntProperty(
         name="Callback Handle",
         description=(
-            "Handle to a callback to call once the operator is done." +
-            "Use Ieslibrary4Blender.register_callback(cb) to get such a handle."
+            "Handle to a callback to call once the operator is done."
+            + "Use Ieslibrary4Blender.register_callback(cb) to get such a handle."
         ),
-        options={'HIDDEN', 'SKIP_SAVE'},
-        default=-1
+        options={"HIDDEN", "SKIP_SAVE"},
+        default=-1,
     )
 
+
 # -------------------------------------------------------------------
-### Light
+# Light
+
 
 class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
     """Import a light just by typing its URL. See documentation for a list of supported light providers."""
+
     bl_idname = "object.light_import"
     bl_label = "Import light"
 
     url: bpy.props.StringProperty(
         name="URL",
         description="Address from which importing the light data",
-        default=""
+        default="",
     )
 
     name: bpy.props.StringProperty(
         name="Name",
         description="Get the texture using a name (for getting local files)",
-        options={'HIDDEN', 'SKIP_SAVE'},
-        default=""
+        options={"HIDDEN", "SKIP_SAVE"},
+        default="",
     )
 
     def execute(self, context):
         pref = getPreferences(context)
-        if bpy.data.filepath == '' and not os.path.isabs(pref.texture_dir):
-            self.report({'ERROR'}, 'You must save the file before using Ieslibrary4Blender')
-            return {'CANCELLED'}
+        if bpy.data.filepath == "" and not os.path.isabs(pref.texture_dir):
+            self.report(
+                {"ERROR"}, "You must save the file before using Ieslibrary4Blender"
+            )
+            return {"CANCELLED"}
 
         texdir = os.path.dirname(bpy.data.filepath)
         name = None if not self.name else self.name
@@ -88,8 +95,8 @@ class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
         if data.error is None:
             data.getVariantList()
         if data.error is not None:
-            self.report({'ERROR_INVALID_INPUT'}, data.error)
-            return {'CANCELLED'}
+            self.report({"ERROR_INVALID_INPUT"}, data.error)
+            return {"CANCELLED"}
 
         selected_variant = 0
         if data.selectVariant(selected_variant):
@@ -98,7 +105,8 @@ class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
             print("scraping failed :/")
         cb = get_callback(self.callback_handle)
         cb(context)
-        return {'FINISHED'}
+        return {"FINISHED"}
+
 
 class OBJECT_OT_ClipboardLightScraper(PopupOperator, CallbackProps):
     bl_idname = "object.light_import_from_clipboard"
@@ -109,26 +117,31 @@ class OBJECT_OT_ClipboardLightScraper(PopupOperator, CallbackProps):
 
     def execute(self, context):
         try:
-            bpy.ops.object.light_import('EXEC_DEFAULT', url=bpy.context.window_manager.clipboard)
+            bpy.ops.object.light_import(
+                "EXEC_DEFAULT", url=bpy.context.window_manager.clipboard
+            )
         except RuntimeError as err:
             msg = err.args[0]
             if msg.startswith("Invalid Input Error: "):
-                error = msg[len("Invalid Input Error: "):]
-                self.report({'ERROR_INVALID_INPUT'}, error)
-                return {'CANCELLED'}
+                error = msg[len("Invalid Input Error: ") :]
+                self.report({"ERROR_INVALID_INPUT"}, error)
+                return {"CANCELLED"}
             else:
                 raise err
-        return {'FINISHED'}
+        return {"FINISHED"}
+
 
 # -------------------------------------------------------------------
-## Panels
+# Panels
+
 
 class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
     """Panel with the IES Scraper button"""
+
     bl_label = "Ieslibrary for Blender"
     bl_idname = "LIGHT_PT_Ieslibrary4Blender"
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
     bl_context = "data"
 
     @classmethod
@@ -138,7 +151,7 @@ class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         pref = getPreferences(context)
-        if bpy.data.filepath == '' and not os.path.isabs(pref.texture_dir):
+        if bpy.data.filepath == "" and not os.path.isabs(pref.texture_dir):
             layout.label(text="You must save the file to use Ieslibrary4Blender")
             layout.label(text="or setup a texture directory in preferences.")
         else:
@@ -147,28 +160,38 @@ class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
             layout.label(text="Available sources:")
             urls = {None}  # avoid doubles
             for S in ScrapersManager.getScrapersList():
-                if 'LIGHT' in S.scraped_type and S.home_url not in urls:
+                if "LIGHT" in S.scraped_type and S.home_url not in urls:
                     split = False
-                    factor = 1.
-                    if not hasattr(custom_icons, S.__name__) or \
-                            (hasattr(custom_icons, S.__name__) and len(getattr(custom_icons, S.__name__)) == 0):
+                    factor = 1.0
+                    if not hasattr(custom_icons, S.__name__) or (
+                        hasattr(custom_icons, S.__name__)
+                        and len(getattr(custom_icons, S.__name__)) == 0
+                    ):
                         thumbnailGeneratorGenerator(S)(0, 0)
                     if len(getattr(custom_icons, S.__name__)) > 0:
                         split = True
-                        factor = .85
+                        factor = 0.85
                     row = layout.split(factor=factor, align=True)
                     row.operator("wm.url_open", text=S.source_name).url = S.home_url
                     if split:
-                        row.template_icon_view(context.scene, S.__name__, scale=1, scale_popup=7.0,
-                                               show_labels=S.show_labels)
+                        row.template_icon_view(
+                            context.scene,
+                            S.__name__,
+                            scale=1,
+                            scale_popup=7.0,
+                            show_labels=S.show_labels,
+                        )
                     urls.add(S.home_url)
 
-## Utils
+
+# Utils
+
 
 def thumbnailGeneratorGenerator(scraper_cls):
     """
     TODO: It is bad design to have Blender halt for downloading metadata while drawing the UI
     """
+
     def generateThumbnailIcon(self, context):
         global custom_icons
 
@@ -184,7 +207,7 @@ def thumbnailGeneratorGenerator(scraper_cls):
         if "missingThumbnail" not in registeredThumbnails:
             registeredThumbnails.add("missingThumbnail")
             missingThumb = os.path.join(__file__, "Data", "missing_thumbnail.jpg")
-            custom_icons.load("missing_thumbnail", missingThumb, 'IMAGE')
+            custom_icons.load("missing_thumbnail", missingThumb, "IMAGE")
 
         basedir = scraper.getTextureDirectory(scraper_cls.home_dir)
 
@@ -214,7 +237,9 @@ def thumbnailGeneratorGenerator(scraper_cls):
                 scraper.getVariantData(i)
                 # if its still empty then just skip this
                 if scraper.metadata.name == "":
-                    print(f"!! failed to get metadata for {i} from {scraper.home_url} !!")
+                    print(
+                        f"!! failed to get metadata for {i} from {scraper.home_url} !!"
+                    )
                     metadataGetFailed.append(i)
                     continue
                 metadata = scraper.metadata
@@ -228,15 +253,20 @@ def thumbnailGeneratorGenerator(scraper_cls):
             thumbnail = os.path.join(basedir, i, thumb_name)
 
             registeredThumbnails.add(i)
-            custom_icons.load(name, thumbnail, 'IMAGE')
+            custom_icons.load(name, thumbnail, "IMAGE")
             items[i] = name
 
         # create icons
         icons = list()
         for i, k in enumerate(items.keys()):
-            icon = custom_icons[items[k]].icon_id if items[k] in custom_icons \
+            icon = (
+                custom_icons[items[k]].icon_id
+                if items[k] in custom_icons
                 else custom_icons["missing_thumbnail"].icon_id
-            icons.append((str(k), str(k), f"{k} from {scraper_cls.source_name}", icon, i))
+            )
+            icons.append(
+                (str(k), str(k), f"{k} from {scraper_cls.source_name}", icon, i)
+            )
 
         setattr(custom_icons, scraper_cls.__name__, tuple(icons))
 
@@ -278,23 +308,25 @@ def enumResponseGenerator(scraper_cls):
 
         # get material
         if "LIGHT" in scraper_cls.scraped_type:
-            bpy.ops.object.light_import('EXEC_DEFAULT', url=metadata.fetchUrl, name=metadata.name)
+            bpy.ops.object.light_import(
+                "EXEC_DEFAULT", url=metadata.fetchUrl, name=metadata.name
+            )
 
         running = True
 
     return enumResult
 
 
-## Registration
+# Registration
 
 classes = (
     OBJECT_OT_LightScraper,
     OBJECT_OT_ClipboardLightScraper,
-
     LIGHT_PT_Ieslibrary4Blender,
 )
 
 rregister, unregister = bpy.utils.register_classes_factory(classes)
+
 
 def register():
     global custom_icons
@@ -302,5 +334,12 @@ def register():
     for S in ScrapersManager.getScrapersList():
         # need to keep this list or the text breaks in menus
         setattr(custom_icons, S.__name__, ())
-        setattr(bpy.types.Scene, S.__name__, EnumProperty(options={"SKIP_SAVE"}, items=thumbnailGeneratorGenerator(S),
-                                                           update=enumResponseGenerator(S)))
+        setattr(
+            bpy.types.Scene,
+            S.__name__,
+            EnumProperty(
+                options={"SKIP_SAVE"},
+                items=thumbnailGeneratorGenerator(S),
+                update=enumResponseGenerator(S),
+            ),
+        )

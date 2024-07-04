@@ -9,11 +9,11 @@ from .settings import UNSUPPORTED_PROVIDER_ERR
 from .ScrapersManager import ScrapersManager
 
 
-class ScrapedData():
-    """Internal representation of materials and worlds, responsible on one side for
-    scrapping texture providers and on the other side to build blender materials.
-    This class must not use the Blender API. Put Blender related stuff in subclasses
-    like CyclesMaterialData."""
+class ScrapedData:
+    """Internal representation of materials and worlds, responsible on one
+    side for scrapping texture providers and on the other side to build
+    blender materials. This class must not use the Blender API. Put Blender
+    related stuff in subclasses like CyclesMaterialData."""
 
     @classmethod
     def makeScraper(cls, url):
@@ -43,7 +43,8 @@ class ScrapedData():
             self.error = scraping_type.capitalize() + " " + UNSUPPORTED_PROVIDER_ERR
             for S in ScrapersManager.getScrapersList():
                 if S.canHandleUrl(self.url) and S.scraped_type:
-                    self.error = f"This URL corresponds to a {next(iter(S.scraped_type)).lower()} but you are trying to import it as a {scraping_type.lower()}"
+                    self.error = f"This URL corresponds to a {next(iter(S.scraped_type)).lower()} but you are trying \
+                        to import it as a {scraping_type.lower()}"
         else:
             self._scraper.texture_root = texture_root
             self._scraper.metadata.scrape_type = scraping_type

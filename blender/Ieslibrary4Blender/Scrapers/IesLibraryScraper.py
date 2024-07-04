@@ -10,8 +10,9 @@ import re
 from .AbstractScraper import AbstractScraper
 from ..preferences import getPreferences
 
+
 class IesLibraryScraper(AbstractScraper):
-    scraped_type = {'LIGHT'}
+    scraped_type = {"LIGHT"}
     source_name = "IES Library"
     home_url = "https://ieslibrary.com"
     home_dir = "ieslibrary"
@@ -30,7 +31,9 @@ class IesLibraryScraper(AbstractScraper):
         asset_id = re.match(self.pattern, url).group(1)
         api_key = getPreferences().ieslibrary_apikey
 
-        api_url = f"https://ieslibrary.com/api/ies/hash:{asset_id}/key:{api_key}/data.json"
+        api_url = (
+            f"https://ieslibrary.com/api/ies/hash:{asset_id}/key:{api_key}/data.json"
+        )
 
         data = self.fetchJson(api_url)
         if data is None:
@@ -71,7 +74,9 @@ class IesLibraryScraper(AbstractScraper):
 
         material_data.name = f"{self.home_dir}/{self.metadata.name}/{variant}"
 
-        data_file = self.fetchFile(download_url, f"{self.home_dir}/{self.metadata.name}", f"{variant}.ies")
+        data_file = self.fetchFile(
+            download_url, f"{self.home_dir}/{self.metadata.name}", f"{variant}.ies"
+        )
         data_dir = os.path.dirname(data_file)
 
         material_data.maps["ies"] = os.path.join(data_dir, f"{variant}.ies")

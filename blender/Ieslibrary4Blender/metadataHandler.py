@@ -10,7 +10,15 @@ import os
 
 
 class Metadata:
-    def __init__(self, name, identifier, scraper_name, source_url, thumbnail_filename, variants_list):
+    def __init__(
+        self,
+        name,
+        identifier,
+        scraper_name,
+        source_url,
+        thumbnail_filename,
+        variants_list,
+    ):
         """class for storing metadata for scrapers about an asset"""
         self.name = name
         self.id = identifier
@@ -38,12 +46,14 @@ class Metadata:
             return cls.createBlank()
         with open(metadata_file, "r") as f:
             data = json.load(f)
-        obj = cls(cls._defaultTo(data, "name", ""),
-                   cls._defaultTo(data, "id", ""),
-                   cls._defaultTo(data, "scraper", ""),
-                   cls._defaultTo(data, "fetchUrl", ""),
-                   cls._defaultTo(data, "thumbnail", None),
-                   cls._defaultTo(data, "variants", list()))
+        obj = cls(
+            cls._defaultTo(data, "name", ""),
+            cls._defaultTo(data, "id", ""),
+            cls._defaultTo(data, "scraper", ""),
+            cls._defaultTo(data, "fetchUrl", ""),
+            cls._defaultTo(data, "thumbnail", None),
+            cls._defaultTo(data, "variants", list()),
+        )
         obj.custom = cls._defaultTo(data, "custom", dict())
         return obj
 
@@ -65,7 +75,7 @@ class Metadata:
             "fetchUrl": self.fetchUrl,
             "thumbnail": self.thumbnail,
             "variants": self.variants,
-            "custom": self.custom
+            "custom": self.custom,
         }
         with open(metadata_filepath, "w") as f:
             json.dump(metadata, f, indent=4)

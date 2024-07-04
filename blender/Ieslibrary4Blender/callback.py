@@ -16,21 +16,23 @@ through operator properties.
 
 callback_dict = {}
 
+
 def register_callback(callback):
-	"""
-	@param callback: a function to call after.an operator is done,
-	taking a unique argument which is the context
-	@return: a handle to the callback, to be provided to the operator
-	"""
-	limit = 1677216
-	if len(callback_dict) > limit / 4:
-		print("Too many callback registered")
-		return -1
-	handle = random.randint(0,limit)
-	while handle in callback_dict:
-		handle = random.randint(0,limit)
-	callback_dict[handle] = callback
-	return handle
+    """
+    @param callback: a function to call after.an operator is done,
+    taking a unique argument which is the context
+    @return: a handle to the callback, to be provided to the operator
+    """
+    limit = 1677216
+    if len(callback_dict) > limit / 4:
+        print("Too many callback registered")
+        return -1
+    handle = random.randint(0, limit)
+    while handle in callback_dict:
+        handle = random.randint(0, limit)
+    callback_dict[handle] = callback
+    return handle
+
 
 def get_callback(handle):
-	return callback_dict.get(handle, lambda context: None)
+    return callback_dict.get(handle, lambda context: None)

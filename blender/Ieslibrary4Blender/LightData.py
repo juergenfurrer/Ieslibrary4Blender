@@ -11,23 +11,22 @@ from .ScrapedData import ScrapedData
 
 class LightData(ScrapedData):
     """Internal representation of world, responsible on one side for
-    scrapping texture providers and on the other side to build blender materials.
-    This class must not use the Blender API. Put Blender related stuff in subclasses
-    like CyclesMaterialData."""
+    scrapping texture providers and on the other side to build blender
+    materials. This class must not use the Blender API. Put Blender
+    related stuff in subclasses like CyclesMaterialData."""
 
     def __init__(self, url, texture_root="", asset_name=None):
-        super().__init__(url, texture_root=texture_root, asset_name=asset_name, scraping_type="LIGHT")
+        super().__init__(
+            url, texture_root=texture_root, asset_name=asset_name, scraping_type="LIGHT"
+        )
 
         self.name = "IES Light"
-        self.maps = {
-            'ies': None,
-            'energy': None
-        }
+        self.maps = {"ies": None, "energy": None}
 
     @classmethod
     def makeScraper(cls, url):
         for S in ScrapersManager.getScrapersList():
-            if 'LIGHT' in S.scraped_type and S.canHandleUrl(url):
+            if "LIGHT" in S.scraped_type and S.canHandleUrl(url):
                 return S()
         return None
 
