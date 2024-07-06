@@ -30,8 +30,7 @@ def main():
         zip(addon_path, P("releases", f"{addon}-v{version}"))
 
         print(
-            f"Done! You may install in Blender the addon \
-                releases/{addon}-v{version}.zip."
+            f"Done! You may install in Blender the addon releases/{addon}-v{version}.zip."
         )
 
 

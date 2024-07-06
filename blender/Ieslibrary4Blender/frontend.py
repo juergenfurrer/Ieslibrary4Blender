@@ -5,6 +5,7 @@
 # ies-lights from ieslibrary.com. It is released under the terms of the MIT
 # license. See the LICENSE.md file for the full text.
 
+
 import os
 import bpy
 
@@ -59,7 +60,6 @@ class CallbackProps:
 
 
 # -------------------------------------------------------------------
-# Light
 
 
 class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
@@ -80,6 +80,13 @@ class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
         options={"HIDDEN", "SKIP_SAVE"},
         default="",
     )
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.label(text="No valid url found in clipboard!")
+        layout.label(text="Please enter a valid url into the text-field")
+        layout.prop(self, "url")
 
     def execute(self, context):
         pref = getPreferences(context)
@@ -110,7 +117,7 @@ class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
 
 class OBJECT_OT_ClipboardLightScraper(PopupOperator, CallbackProps):
     bl_idname = "object.light_import_from_clipboard"
-    bl_label = "Import from clipboard"
+    bl_label = "Import from ieslibrary.com"
 
     def invoke(self, context, event):
         return self.execute(context)
@@ -123,9 +130,8 @@ class OBJECT_OT_ClipboardLightScraper(PopupOperator, CallbackProps):
         except RuntimeError as err:
             msg = err.args[0]
             if msg.startswith("Invalid Input Error: "):
-                error = msg[len("Invalid Input Error: ") :]
-                self.report({"ERROR_INVALID_INPUT"}, error)
-                return {"CANCELLED"}
+                # Open the input-field
+                bpy.ops.object.light_import('INVOKE_DEFAULT')
             else:
                 raise err
         return {"FINISHED"}
@@ -138,7 +144,7 @@ class OBJECT_OT_ClipboardLightScraper(PopupOperator, CallbackProps):
 class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
     """Panel with the IES Scraper button"""
 
-    bl_label = "Ieslibrary for Blender"
+    bl_label = "IES from ieslibrary.com"
     bl_idname = "LIGHT_PT_Ieslibrary4Blender"
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
@@ -155,9 +161,7 @@ class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
             layout.label(text="You must save the file to use Ieslibrary4Blender")
             layout.label(text="or setup a texture directory in preferences.")
         else:
-            layout.operator("object.light_import")
             layout.operator("object.light_import_from_clipboard")
-            layout.label(text="Available sources:")
             urls = {None}  # avoid doubles
             for S in ScrapersManager.getScrapersList():
                 if "LIGHT" in S.scraped_type and S.home_url not in urls:

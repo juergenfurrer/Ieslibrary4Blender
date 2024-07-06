@@ -5,6 +5,7 @@
 # ies-lights from ieslibrary.com. It is released under the terms of the MIT
 # license. See the LICENSE.md file for the full text.
 
+import bpy
 from . import preferences
 from . import frontend
 
@@ -24,14 +25,41 @@ bl_info = {
 }
 
 
+# Define "Extras" menu
+def menu_func(self, context):
+    layout = self.layout
+    layout.operator_context = "INVOKE_REGION_WIN"
+
+    layout.operator(
+        "object.light_import_from_clipboard",
+        text="IES from ieslibrary.com",
+        icon="OUTLINER_DATA_LIGHT",
+    )
+
+
+classes = []
+
+
 def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
     preferences.register()
     frontend.register()
+
+    # Add "Extras" menu to the "Add Light" menu and context menu.
+    bpy.types.VIEW3D_MT_light_add.append(menu_func)
 
 
 def unregister():
     frontend.unregister()
     preferences.unregister()
+
+    # Remove "Extras" menu from the "Add Light" menu and context menu.
+    bpy.types.VIEW3D_MT_light_add.remove(menu_func)
+
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
 
 
 if __name__ == "__main__":

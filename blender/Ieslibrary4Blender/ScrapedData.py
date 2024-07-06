@@ -43,8 +43,8 @@ class ScrapedData:
             self.error = scraping_type.capitalize() + " " + UNSUPPORTED_PROVIDER_ERR
             for S in ScrapersManager.getScrapersList():
                 if S.canHandleUrl(self.url) and S.scraped_type:
-                    self.error = f"This URL corresponds to a {next(iter(S.scraped_type)).lower()} but you are trying \
-                        to import it as a {scraping_type.lower()}"
+                    self.error = f"This URL corresponds to a {next(iter(S.scraped_type)).lower()} but you are trying " \
+                        + "to import it as a {scraping_type.lower()}"
         else:
             self._scraper.texture_root = texture_root
             self._scraper.metadata.scrape_type = scraping_type

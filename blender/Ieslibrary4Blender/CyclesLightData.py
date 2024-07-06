@@ -17,13 +17,36 @@ class CyclesLightData(LightData):
     def createLights(self):
         pref = getPreferences()
 
-        light = bpy.data.lights.new(self.name, "POINT")
-        bpy.context.object.data = light
+        selected_item = None
+        selected_items = bpy.context.selected_objects
+        if selected_items is not None and len(selected_items) > 0:
+            # Use the first selected object
+            selected_item = selected_items[0]
 
-        light.use_nodes = True
-        light.shadow_soft_size = 0
+        if selected_item is None:
+            # in case there is no selected object, try to use the active object
+            selected_item = bpy.context.active_object
 
-        tree = light.node_tree
+        if selected_item is not None and (
+            selected_item.type == "POINT" or selected_item.type == "LIGHT"
+        ):
+            light_data = bpy.data.lights.new(self.name, "POINT")
+            bpy.context.object.data = light_data
+        else:
+            light_data = bpy.data.lights.new(self.name, "POINT")
+            light_object = bpy.data.objects.new(name=self.name, object_data=light_data)
+
+            # Set the light to 3D cursor
+            light_object.location = bpy.context.scene.cursor.location
+
+            # Add links
+            bpy.context.collection.objects.link(light_object)
+            # bpy.context.view_layer.objects.active = light_object
+
+        light_data.use_nodes = True
+        light_data.shadow_soft_size = 0
+
+        tree = light_data.node_tree
         nodes = tree.nodes
         links = tree.links
 
@@ -52,7 +75,7 @@ class CyclesLightData(LightData):
                 value.outputs["Value"].default_value = energy
                 links.new(value.outputs["Value"], iesNode.inputs["Strength"])
             else:
-                light.energy = energy
+                light_data.energy = energy
 
         if pref.ies_add_blackbody:
             blacbody = nodes.new(type="ShaderNodeBlackbody")
@@ -61,4 +84,4 @@ class CyclesLightData(LightData):
 
         autoAlignNodes(out)
 
-        return light
+        return light_data
