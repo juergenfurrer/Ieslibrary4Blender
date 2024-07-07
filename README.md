@@ -41,6 +41,21 @@ If a path is relative like `image-textures\ies` _Ieslibrary4Blender_ searches fo
 
 ### Add Menu
 
+1. Ctrl + a to open the Add-Menu
+
+![Add Menu](doc/add-menu.png)
+
+2. Select `Light > IES from ieslibrary.com`
+
+3. If a valid URL is in the clipboard, a new lamp will be created
+
+If you have selected something else then a point-lamp, a new lamp will be created.
+
+If you dont have a valid ieslibrary.com url in the clipboard, a popup will be opened, where you can enter a valid URL.
+
+![Popup with url-field](doc/paste-url.png)
+
+
 ### Existing light
 
 1. Open the light properties panel.
@@ -55,7 +70,7 @@ If a path is relative like `image-textures\ies` _Ieslibrary4Blender_ searches fo
  
 4. Copy the URL
 
-5. Click _Import from ieslibrary.com_ to instantly import the material. If there is no valid url in the clipboard a popup will open, where you can enter the URL manually:
+5. Click _Import from ieslibrary.com_ to instantly import the light. If there is no valid url in the clipboard a popup will open, where you can enter the URL manually:
 
 ![Popup with url-field](doc/paste-url.png)
 
