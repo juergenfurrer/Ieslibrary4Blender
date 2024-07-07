@@ -41,7 +41,7 @@ If a path is relative like `image-textures\ies` _Ieslibrary4Blender_ searches fo
 
 ### Add Menu
 
-1. Ctrl + a to open the Add-Menu
+1. Shift + a to open the Add-Menu
 
 ![Add Menu](doc/add-menu.png)
 
