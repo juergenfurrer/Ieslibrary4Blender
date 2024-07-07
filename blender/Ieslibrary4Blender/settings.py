@@ -1,4 +1,4 @@
-# Copyright (c) 2024 - 2024 Jürgen Furrer
+# Copyright (c) 2024 Jürgen Furrer
 # Based on LilySurfaceScrapper
 #
 # This file is part of Ieslibrary4Blender, a Blender add-on to import
