@@ -7,7 +7,6 @@
 
 import bpy
 
-addon_idname = __package__.split(".")[0]
 
 # -----------------------------------------------------------------------------
 
@@ -16,7 +15,7 @@ def getPreferences(context=None):
     if context is None:
         context = bpy.context
     preferences = context.preferences
-    addon_preferences = preferences.addons[addon_idname].preferences
+    addon_preferences = preferences.addons[__package__].preferences
     return addon_preferences
 
 
@@ -24,7 +23,7 @@ def getPreferences(context=None):
 
 
 class Ieslibrary4BlenderPreferences(bpy.types.AddonPreferences):
-    bl_idname = addon_idname
+    bl_idname = __package__
 
     texture_dir: bpy.props.StringProperty(
         name="Texture Directory",
