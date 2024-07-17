@@ -20,7 +20,7 @@ if module_root not in sys.path:
 
 
 bl_info = {
-    "name": "Ieslibrary for Blender",
+    "name": "Ieslibrary Integration",
     "author": "Jürgen Furrer <juergen@swisscode.sk>",
     "version": (1, 0, 0),
     "blender": (4, 0, 0),

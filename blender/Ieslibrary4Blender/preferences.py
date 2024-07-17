@@ -28,7 +28,7 @@ class Ieslibrary4BlenderPreferences(bpy.types.AddonPreferences):
     texture_dir: bpy.props.StringProperty(
         name="Texture Directory",
         subtype="DIR_PATH",
-        default="Ieslibrary2Blender",
+        default="Ieslibrary4Blender",
     )
 
     ieslibrary_apikey: bpy.props.StringProperty(

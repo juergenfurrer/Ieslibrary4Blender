@@ -1,10 +1,6 @@
-# Ieslibrary4Blender
-Blender plugin to find lights from ieslibrary.com
-
-
 ![Cover](doc/cover.jpg)
 
-Ieslibrary for Blender
+Ieslibrary Integration
 ======================
 
 Ieslibrary4Blender is based on LilySurfaceScraper.
@@ -21,7 +17,7 @@ You can simply browse ieslibrary.com as normal, copy the URL and insert a new li
 
 Download the [latest release](https://github.com/juergenfurrer/Ieslibrary4Blender/releases/latest), then in Blender, go to `Edit > Preferences`, `Add-on`, `Install`, browse to the zip file.
 
-Make sure that you have ticked the small checkbox next to "Import: Ieslibrary for Blender", otherwise the add-on will not be active.
+Make sure that you have ticked the small checkbox next to "Import: Ieslibrary Integration", otherwise the add-on will not be active.
 
 Open ieslibrary and got to [Profile > API](https://ieslibrary.com/api) and create a new API-Key.
 

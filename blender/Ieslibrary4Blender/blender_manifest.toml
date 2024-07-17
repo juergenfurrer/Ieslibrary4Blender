@@ -1,8 +1,8 @@
 schema_version = "1.0.0"
 
 id = "Ieslibrary4Blender"
-version = "1.0.2"
-name = "Ieslibrary for Blender"
+version = "1.0.3"
+name = "Ieslibrary Integration"
 tagline = "Import IES from a single URL from ieslibrary.com"
 maintainer = "Jürgen Furrer <juergen@swisscode.sk>"
 type = "add-on"

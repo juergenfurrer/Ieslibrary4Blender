@@ -92,7 +92,7 @@ class OBJECT_OT_LightScraper(PopupOperator, CallbackProps):
         pref = getPreferences(context)
         if bpy.data.filepath == "" and not os.path.isabs(pref.texture_dir):
             self.report(
-                {"ERROR"}, "You must save the file before using Ieslibrary4Blender"
+                {"ERROR"}, "You must save the file before using Ieslibrary Integration"
             )
             return {"CANCELLED"}
 
@@ -158,7 +158,7 @@ class LIGHT_PT_Ieslibrary4Blender(bpy.types.Panel):
         layout = self.layout
         pref = getPreferences(context)
         if bpy.data.filepath == "" and not os.path.isabs(pref.texture_dir):
-            layout.label(text="You must save the file to use Ieslibrary4Blender")
+            layout.label(text="You must save the file to use Ieslibrary Integration")
             layout.label(text="or setup a texture directory in preferences.")
         else:
             layout.operator("object.light_import_from_clipboard")
