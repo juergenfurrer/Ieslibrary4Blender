@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "Ieslibrary4Blender"
-version = "1.0.1"
+version = "1.0.2"
 name = "Ieslibrary for Blender"
 tagline = "Import IES from a single URL from ieslibrary.com"
 maintainer = "Jürgen Furrer <juergen@swisscode.sk>"
@@ -11,8 +11,7 @@ website = "https://github.com/juergenfurrer/Ieslibrary4Blender"
 
 tags = ["Lighting", "Import-Export"]
 
-blender_version_min = "4.0.0"
-# blender_version_max = "4.2.0"
+blender_version_min = "4.2.0"
 
 license = [
   "SPDX:GPL-3.0-or-later",
