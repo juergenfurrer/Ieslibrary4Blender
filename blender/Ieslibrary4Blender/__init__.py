@@ -13,10 +13,10 @@ from . import frontend
 bl_info = {
     "name": "Ieslibrary for Blender",
     "author": "Jürgen Furrer <juergen@swisscode.sk>",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     "blender": (4, 0, 0),
     "location": "Properties > Light",
-    "description": "Import IES from a single URL",
+    "description": "Import IES from a single URL from ieslibrary.com",
     "warning": "",
     "wiki_url": "",
     "tracker_url": "https://github.com/juergenfurrer/Ieslibrary4Blender/issues",

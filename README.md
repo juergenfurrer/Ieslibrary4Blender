@@ -37,6 +37,13 @@ You can set a path to your texture library. If the path is in absolute form, lik
 
 If a path is relative like `image-textures\ies` _Ieslibrary4Blender_ searches for a folder named _image-textures_ next to your .blend project file and saves the textures inside _image-textures_ in a subfolder named _ies_.
 
+**Online Access (Blender 4.2+)**
+
+This AddOn have to download data from the internet. If you using Beldner 4.2LTS, you have to turn the "Allow Online Access" to yes.
+
+![Allow Online Access](doc/online-access.png)
+
+
 ## Usage
 
 ### Add Menu
@@ -49,7 +56,7 @@ If a path is relative like `image-textures\ies` _Ieslibrary4Blender_ searches fo
 
 3. If a valid URL is in the clipboard, a new lamp will be created
 
-If you have selected something else then a point-lamp, a new lamp will be created.
+If you have selected something else then a point-lamp, a new lamp will be created at the position of your 3D-Cursor.
 
 If you dont have a valid ieslibrary.com url in the clipboard, a popup will be opened, where you can enter a valid URL.
 

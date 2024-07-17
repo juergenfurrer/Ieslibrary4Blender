@@ -6,4 +6,4 @@
 # license. See the LICENSE.md file for the full text.
 
 TEXTURE_DIR = "Ieslibrary4Blender"
-UNSUPPORTED_PROVIDER_ERR = "provider not supported. See the documentation for a list of supported providers."
+UNSUPPORTED_PROVIDER_ERR = "-Import failed: No valid url! See the documentation for how to get a valid url."

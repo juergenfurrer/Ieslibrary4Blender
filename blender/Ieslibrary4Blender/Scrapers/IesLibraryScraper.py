@@ -7,6 +7,7 @@
 
 import os
 import re
+import bpy
 from .AbstractScraper import AbstractScraper
 from ..preferences import getPreferences
 
@@ -34,6 +35,11 @@ class IesLibraryScraper(AbstractScraper):
         api_url = (
             f"https://ieslibrary.com/api/ies/hash:{asset_id}/key:{api_key}/data.json"
         )
+
+        # Check the permission (Blender 4.2+)
+        if hasattr(bpy.app, 'online_access') and bpy.app.online_access is False:
+            self.error = f"Online access is turned off, to download the data, you have to turn it on in the Preferences."
+            return None
 
         data = self.fetchJson(api_url)
         if data is None:
